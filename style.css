@@ -1,0 +1,744 @@
+:root {
+    --gold: #d4af37;
+    --gold-light: #f9e596;
+    --dark: #0f1626;
+    --dark-overlay: rgba(15, 22, 38, 0.85);
+    --text-primary: #ededed;
+    --text-secondary: #aaaaaa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1,
+h2,
+h3,
+.names {
+    font-family: 'Dancing Script', cursive;
+    color: var(--gold);
+    font-weight: 500;
+}
+
+/* Background Image with Overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, #1b263b 0%, #0d1321 100%);
+    z-index: -2;
+}
+
+/* Particles / Petals */
+#particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    background: radial-gradient(circle, var(--gold-light), transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 15px 5px rgba(212, 175, 55, 0.4);
+    opacity: 0;
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(110vh) translateX(0px) scale(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(90vh) translateX(-20px) scale(1);
+    }
+
+    50% {
+        transform: translateY(50vh) translateX(30px) scale(1.5);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(10vh) translateX(-20px) scale(1);
+    }
+
+    100% {
+        transform: translateY(-10vh) translateX(0px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Utilities */
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+/* Cover Screen Magic Doors */
+.cover-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.door {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop') center center / cover no-repeat;
+    background-attachment: fixed;
+    z-index: 1;
+    transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+    pointer-events: auto;
+}
+
+.door::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dark-overlay);
+    backdrop-filter: blur(5px);
+}
+
+.door-left {
+    left: 0;
+    border-right: 1px solid var(--gold);
+}
+
+.door-right {
+    right: 0;
+    border-left: 1px solid var(--gold);
+}
+
+.door-left.open {
+    transform: translateX(-100%);
+}
+
+.door-right.open {
+    transform: translateX(100%);
+}
+
+.cover-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    pointer-events: auto;
+}
+
+.cover-names {
+    font-size: 5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    animation: fadeInDown 1.5s ease;
+}
+
+.cover-subtitle {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    animation: fadeInUp 1.5s ease 0.5s both;
+}
+
+button {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 12px 32px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gold);
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease;
+}
+
+button:hover {
+    color: var(--dark);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+button:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.open-btn {
+    animation: pulse 2s infinite 2s;
+    animation-fill-mode: both;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
+}
+
+/* Hide Cover Content */
+.cover-content.hide {
+    opacity: 0;
+    transform: scale(1.1);
+    pointer-events: none;
+    transition: opacity 1s, transform 1s;
+}
+
+/* Invitation Card */
+.invitation-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    perspective: 1500px;
+}
+
+.invitation-wrapper:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.card {
+    background: rgba(15, 22, 38, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+}
+
+.invitation-wrapper:not(.hidden) .card {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.card-border {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 8px;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.4), inset 0 0 25px rgba(212, 175, 55, 0.15);
+}
+
+.card-border::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    opacity: 0.3;
+}
+
+.card-border::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
+    border: 1px solid var(--gold-light);
+    border-radius: 16px;
+    opacity: 0.1;
+}
+
+.divider {
+    margin: 2rem 0;
+}
+
+.intro {
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.card .names {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #d4af37 0%, #f9e596 50%, #d4af37 100%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shine 5s linear infinite;
+    text-shadow: 0px 4px 20px rgba(212, 175, 55, 0.2);
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.ampersand {
+    font-size: 3rem;
+    color: var(--gold-light);
+    font-family: 'Dancing Script', cursive;
+    display: inline-block;
+    animation: pulseText 2s infinite alternate;
+}
+
+@keyframes pulseText {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.1);
+        opacity: 1;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    }
+}
+
+.invite-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.details {
+    margin: 2rem 0;
+}
+
+.detail-item {
+    margin-bottom: 1.5rem;
+}
+
+.detail-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--gold-light);
+}
+
+.detail-item p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* Card Entry Animations */
+.slide-up,
+.slide-up-delay-1,
+.slide-up-delay-2,
+.slide-up-delay-3,
+.slide-up-delay-4 {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.invitation-wrapper:not(.hidden) .slide-up {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.5s;
+}
+
+.invitation-wrapper:not(.hidden) .slide-up-delay-1 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.8s;
+}
+
+.invitation-wrapper:not(.hidden) .slide-up-delay-2 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 1.1s;
+}
+
+.invitation-wrapper:not(.hidden) .slide-up-delay-3 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 1.4s;
+}
+
+.invitation-wrapper:not(.hidden) .slide-up-delay-4 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 1.7s;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark-overlay);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.modal-content {
+    background: var(--dark);
+    padding: 3rem;
+    border-radius: 12px;
+    border: 1px solid var(--gold);
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.modal:not(.hidden) .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: var(--gold);
+}
+
+.modal h2 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal p {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+.map-container {
+    width: 100%;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.directions-btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 12px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.directions-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Custom Elements & Extra Features */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin: 2.5rem 0;
+}
+
+.time-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 10px 15px;
+    min-width: 70px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.time-box span {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.time-box small {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+.music-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(15, 22, 38, 0.8);
+    border: 1px solid var(--gold);
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    animation: rotateSlow 10s linear infinite;
+}
+
+@keyframes rotateSlow {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+/* Gallery Modal Specific */
+.gallery-content {
+    max-width: 900px;
+    width: 95%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    overflow-y: auto;
+    padding: 10px;
+    margin-top: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) var(--dark);
+}
+
+.gallery-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.gallery-grid::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 6px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 330;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    border-color: var(--gold);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .cover-names {
+        font-size: 3.5rem;
+    }
+
+    .card {
+        padding: 2rem 1.5rem;
+    }
+
+    .card .names {
+        font-size: 3rem;
+    }
+
+
+}
+
+/* Added top photo on the unlocked invitation page.
+   The original cover screen and invitation content remain unchanged. */
+.invitation-wrapper {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    padding: 2rem 1rem 4rem;
+    overflow-y: auto;
+}
+
+.invitation-top-image {
+    width: min(100%, 600px);
+    height: clamp(190px, 32vw, 320px);
+    flex: 0 0 auto;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.75);
+    border-radius: 12px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.42),
+                0 0 0 5px rgba(212, 175, 55, 0.08);
+    position: relative;
+}
+
+.invitation-top-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 65%, rgba(15, 22, 38, 0.22));
+    pointer-events: none;
+}
+
+.invitation-top-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 43%;
+}
+
+.invitation-wrapper .card {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+    .invitation-wrapper {
+        gap: 1.1rem;
+        padding: 1rem 0.85rem 3rem;
+    }
+
+    .invitation-top-image {
+        width: 100%;
+        height: clamp(180px, 58vw, 260px);
+    }
+
+    .invitation-wrapper .card {
+        padding: 2rem 1.25rem;
+    }
+}
+
+
+/* Automatic wedding photo strip (replaces the old View Photos popup). */
+.photo-strip {
+    width: 100%; max-width: 760px; overflow: hidden; margin: 1.5rem auto 0.5rem;
+    padding: 0.45rem 0; border-top: 1px solid rgba(212, 175, 55, 0.28);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.28);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+.photo-track { display: flex; width: max-content; gap: 1rem; animation: weddingPhotoScroll 32s linear infinite; }
+.photo-track img { display: block; width: clamp(125px, 19vw, 190px); height: clamp(105px, 15vw, 145px);
+    flex: 0 0 auto; object-fit: cover; border: 1px solid rgba(212, 175, 55, 0.65);
+    border-radius: 9px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); }
+.photo-strip:hover .photo-track { animation-play-state: paused; }
+@keyframes weddingPhotoScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 600px) {
+    .photo-strip { margin-top: 1rem; } .photo-track { gap: 0.7rem; animation-duration: 26s; }
+    .photo-track img { width: 125px; height: 105px; }
+}
+@media (prefers-reduced-motion: reduce) { .photo-track { animation: none; } }
